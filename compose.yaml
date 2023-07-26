@@ -1,9 +1,19 @@
 services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+  service:
+    container_name: bank_system_java
+    build: .
     ports:
-      - '5432'
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - database
+    volumes:
+      - ./data:/info
+  database:
+    container_name: bank_database
+    image: 'postgres:15'
+    env_file:
+      - .env
+    ports:
+      - '5433:5432'
