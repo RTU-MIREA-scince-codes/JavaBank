@@ -29,4 +29,8 @@ public class Client {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id", nullable = false)
+    private Manager manager;
 }
