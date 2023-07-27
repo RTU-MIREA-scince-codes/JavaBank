@@ -5,8 +5,8 @@ CREATE TABLE manager_t (
                            FOREIGN KEY (user_id) REFERENCES user_t (id)
 );
 
-ALTER TABLE user_t ADD COLUMN manager_id INT;
-ALTER TABLE user_t ADD FOREIGN KEY (manager_id) REFERENCES manager_t (id);
+ALTER TABLE client_t ADD COLUMN manager_id INT;
+ALTER TABLE client_t ADD FOREIGN KEY (manager_id) REFERENCES manager_t (id);
 
 CREATE TABLE transaction_t (
                                id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
