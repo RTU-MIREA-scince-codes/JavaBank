@@ -1,4 +1,4 @@
-package ru.rtu_mirea.javabank.entity;
+package ru.rtu_mirea.javabank.entity.bankEntity;
 
 import jakarta.persistence.*;
 import lombok.Data;

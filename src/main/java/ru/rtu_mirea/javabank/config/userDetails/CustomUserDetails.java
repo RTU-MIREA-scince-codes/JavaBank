@@ -3,8 +3,8 @@ package ru.rtu_mirea.javabank.config.userDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.rtu_mirea.javabank.entity.Group;
-import ru.rtu_mirea.javabank.entity.User;
+import ru.rtu_mirea.javabank.entity.systemEntities.Group;
+import ru.rtu_mirea.javabank.entity.systemEntities.User;
 
 import java.util.ArrayList;
 import java.util.Collection;

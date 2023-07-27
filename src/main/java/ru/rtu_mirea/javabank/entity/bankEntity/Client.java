@@ -1,7 +1,8 @@
-package ru.rtu_mirea.javabank.entity;
+package ru.rtu_mirea.javabank.entity.bankEntity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import ru.rtu_mirea.javabank.entity.systemEntities.User;
 
 import java.util.HashSet;
 import java.util.Set;

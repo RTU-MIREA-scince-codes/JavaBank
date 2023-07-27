@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.rtu_mirea.javabank.entity.User;
+import ru.rtu_mirea.javabank.entity.systemEntities.User;
 import ru.rtu_mirea.javabank.repository.UserRepository;
 
 @Service("userDetailsService")
