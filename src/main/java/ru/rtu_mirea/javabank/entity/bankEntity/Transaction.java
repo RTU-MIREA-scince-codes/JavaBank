@@ -3,6 +3,8 @@ package ru.rtu_mirea.javabank.entity.bankEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "transaction_t")
 @Data
@@ -18,7 +20,7 @@ public class Transaction {
     private double transactionAmount;
 
     @Column(name = "transaction_date", nullable = false)
-    private String transactionDate;
+    private Date transactionDate;
 
     @ManyToOne
     @JoinColumn(name = "bank_account_id", nullable = false)

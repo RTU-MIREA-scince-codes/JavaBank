@@ -3,6 +3,8 @@ package ru.rtu_mirea.javabank.entity.bankEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "debit_card_t")
 @Data
@@ -18,7 +20,7 @@ public class DebitCard {
     private String cvv;
 
     @Column(name = "expiration_date", nullable = false)
-    private String expirationDate;
+    private Date expirationDate;
 
     @Column(name = "balance", nullable = false)
     private double balance;
