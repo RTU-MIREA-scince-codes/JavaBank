@@ -32,4 +32,17 @@ public class BankAccount {
             joinColumns = @JoinColumn(name = "bank_account_id"),
             inverseJoinColumns = @JoinColumn(name = "debit_card_id"))
     private Set<DebitCard> debitCards = new HashSet<>();
+
+    public void addingFundsToBankAccount(double amount) {
+
+        this.balance += amount;
+    }
+
+    public boolean withdrawFundsFromBankAccount(double amount) {
+        if (this. balance < amount) {
+            return false;
+        }
+        this.balance -= amount;
+        return true;
+    }
 }
