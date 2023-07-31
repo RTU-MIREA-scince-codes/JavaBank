@@ -6,12 +6,12 @@ import ru.rtu_mirea.javabank.entity.bankEntity.Client;
 import ru.rtu_mirea.javabank.entity.bankEntity.Transaction;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     Transaction findByTransactionNumber(String transactionNumber);
-    Transaction findByTransactionDate(String transactionDate);
-    Collection<Transaction> findAllByTransactionDate(String transactionDate);
+    Transaction findByTransactionDate(Date transactionDate);
+    Collection<Transaction> findAllByTransactionDate(Date transactionDate);
     Collection<Transaction> findAllByTransactionAmount(double transactionAmount);
-    Iterable<Transaction> findAllByClientOrderByOrderByTransactionDateAsc(Long clientId);
 }
