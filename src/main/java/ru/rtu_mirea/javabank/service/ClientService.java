@@ -10,6 +10,7 @@ import ru.rtu_mirea.javabank.repository.BankAccountRepository;
 import ru.rtu_mirea.javabank.repository.ClientRepository;
 import ru.rtu_mirea.javabank.repository.TransactionRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -70,11 +71,19 @@ public class ClientService {
     }
 
     // Show client's transactions
-    public Set<Transaction> getTransactions(String clientNumber) {
+    public Collection<Transaction> getTransactions(String clientNumber) {
         try {
             Client client = clientRepository.findByClientNumber(clientNumber);
-            // Collection<Transaction> transactions = TransactionRepository.findAllByClientOrderByOrderByTransactionDateAsc(client.getId());
-            return null;
+            Collection<Transaction> transactions = transactionRepository.findAll();
+            Collection<Transaction> clientTransactions = new ArrayList<>();
+            for (Transaction transaction : transactions) {
+                if (transaction.getClient().getId().equals(client.getId())) {
+                    clientTransactions.add(transaction);
+                }
+            }
+            // Sort transactions by date
+            clientTransactions.stream().sorted((o1, o2) -> o2.getTransactionDate().compareTo(o1.getTransactionDate()));
+            return clientTransactions;
         } catch (Exception e) {
             log.error("Error in ClientService.getTransactions: " + e.getMessage());
             return null;
