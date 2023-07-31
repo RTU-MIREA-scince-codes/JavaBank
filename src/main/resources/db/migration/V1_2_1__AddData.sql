@@ -11,7 +11,12 @@ INSERT INTO debit_card_t (card_number, cvv, expiration_date, active, balance) VA
 INSERT INTO bank_account_debit_card_t (bank_account_id, debit_card_id) VALUES (1, 1);
 INSERT INTO bank_account_debit_card_t (bank_account_id, debit_card_id) VALUES (1, 2);
 
-INSERT INTO manager_t (manager_number, user_id) VALUES ('MN-0001', 1);
+-- Password: 1234
+INSERT INTO user_t (first_name, last_name, email, telephone_number, password, active) VALUES
+    ('Manager', 'Manager', 'manager@localhost', '+7(213)456-78-90', '$2y$10$kBRdheQ.nQbcQgxfYn5H5.Eg9oE7MGyCgjwwXuK/lItaomZ6ZXE.u', TRUE);
+INSERT INTO group_t (code, description_of_group) VALUES ('manager', 'Manager of the bank system');
+INSERT INTO user_group_t (user_id, group_id) VALUES (3, 3);
+INSERT INTO manager_t (manager_number, user_id) VALUES ('MN-0001', 3);
 
 UPDATE client_t SET manager_id = 1 WHERE id = 1;
 
