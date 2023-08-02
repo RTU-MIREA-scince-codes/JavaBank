@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.rtu_mirea.javabank.dto.UserDTO;
+import ru.rtu_mirea.javabank.entity.bankEntity.BankAccount;
 import ru.rtu_mirea.javabank.entity.bankEntity.Client;
+import ru.rtu_mirea.javabank.entity.bankEntity.DebitCard;
 import ru.rtu_mirea.javabank.entity.bankEntity.Transaction;
 import ru.rtu_mirea.javabank.entity.systemEntities.Group;
 import ru.rtu_mirea.javabank.entity.systemEntities.User;
@@ -26,28 +28,40 @@ public class AdminService {
     private final DebitCardRepository debitCardRepository;
     private final GroupRepository groupRepository;
 
-    public void createUser(UserDTO userDTO) {
-        User user = new User();
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setTelephoneNumber(userDTO.getTelephoneNumber());
-        user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
-        user.setActive(true);
-        Set<Group> userGroups = new HashSet<>();
-        userGroups.add(groupRepository.findByCode("client"));
-        user.setUserGroups(userGroups);
-        userRepository.save(user);
-        log.info("User created: " + userDTO.getEmail());
+    public boolean createUser(UserDTO userDTO) {
+        try {
+            User user = new User();
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setEmail(userDTO.getEmail());
+            user.setTelephoneNumber(userDTO.getTelephoneNumber());
+            user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
+            user.setActive(true);
+            Set<Group> userGroups = new HashSet<>();
+            userGroups.add(groupRepository.findByCode("client"));
+            user.setUserGroups(userGroups);
+            userRepository.save(user);
+            log.info("User created: " + userDTO.getEmail());
+            return true;
+        } catch (Exception e) {
+            log.error("Error in AdminService.createUser: " + e.getMessage());
+            return false;
+        }
     }
 
-    public void createManager(String email) {
-        User clientToManager = userRepository.findByEmail(email);
-        Set<Group> clientGroups = clientToManager.getUserGroups();
-        clientGroups.add(groupRepository.findByCode("manager"));
-        clientToManager.setUserGroups(clientGroups);
-        userRepository.save(clientToManager);
-        log.info("Client " + clientToManager.getEmail() + " is a manager");
+    public boolean createManager(String email) {
+        try {
+            User clientToManager = userRepository.findByEmail(email);
+            Set<Group> clientGroups = clientToManager.getUserGroups();
+            clientGroups.add(groupRepository.findByCode("manager"));
+            clientToManager.setUserGroups(clientGroups);
+            userRepository.save(clientToManager);
+            log.info("Client " + clientToManager.getEmail() + " is a manager");
+            return true;
+        } catch (Exception e) {
+            log.error("Error in AdminService.createManager: " + e.getMessage());
+            return false;
+        }
     }
 
     public Collection<Client> showAllClients() {
@@ -60,17 +74,37 @@ public class AdminService {
         return transactions;
     }
 
-    public void blockUser (Long id) {
-        User user = userRepository.findById(id).orElseThrow();
-        user.setActive(false);
-        userRepository.save(user);
-        log.info("User " + user.getEmail() + " blocked");
+    public Collection<BankAccount> showAllBankAccounts() {
+        return bankAccountRepository.findAll();
     }
 
-    public void unblockUser (Long id) {
-        User user = userRepository.findById(id).orElseThrow();
-        user.setActive(true);
-        userRepository.save(user);
-        log.info("User " + user.getEmail() + " unblocked");
+    public Collection<DebitCard> showAllDebitCards() {
+        return debitCardRepository.findAll();
+    }
+
+    public boolean blockUser (Long id) {
+        try {
+            User user = userRepository.findById(id).orElseThrow();
+            user.setActive(false);
+            userRepository.save(user);
+            log.info("User " + user.getEmail() + " blocked");
+            return true;
+        } catch (Exception e) {
+            log.error("Error in AdminService.blockUser: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean unblockUser (Long id) {
+        try {
+            User user = userRepository.findById(id).orElseThrow();
+            user.setActive(true);
+            userRepository.save(user);
+            log.info("User " + user.getEmail() + " unblocked");
+            return true;
+        } catch (Exception e) {
+            log.error("Error in AdminService.unblockUser: " + e.getMessage());
+            return false;
+        }
     }
 }

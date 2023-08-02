@@ -15,7 +15,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ManageService {
+public class ManagerService {
     private ClientRepository clientRepository;
     private TransactionRepository transactionRepository;
 
@@ -72,17 +72,23 @@ public class ManageService {
         }
     }
 
-    public void createBankAccount(String clientNumber) {
-        Client client = clientRepository.findByClientNumber(clientNumber);
-        BankAccount bankAccount = new BankAccount();
-        bankAccount.setClient(client);
-        bankAccount.setAccountNumber("B_" + client.getClientNumber() + "_" + (client.getBankAccounts().size() + 1));
-        bankAccount.setBalance(0);
-        bankAccount.setActive(true);
-        client.getBankAccounts().add(bankAccount);
+    public boolean createBankAccount(String clientNumber) {
+        try {
+            Client client = clientRepository.findByClientNumber(clientNumber);
+            BankAccount bankAccount = new BankAccount();
+            bankAccount.setClient(client);
+            bankAccount.setAccountNumber("B_" + client.getClientNumber() + "_" + (client.getBankAccounts().size() + 1));
+            bankAccount.setBalance(0);
+            bankAccount.setActive(true);
+            client.getBankAccounts().add(bankAccount);
 
-        clientRepository.save(client);
-        log.info("Bank account created for client: " + clientNumber + " with number: " + bankAccount.getAccountNumber()
-                + " by manager: " + client.getManager().getManagerNumber());
+            clientRepository.save(client);
+            log.info("Bank account created for client: " + clientNumber + " with number: " + bankAccount.getAccountNumber()
+                    + " by manager: " + client.getManager().getManagerNumber());
+            return true;
+        } catch (Exception e) {
+            log.error("Error in ManageService.createBankAccount: " + e.getMessage());
+            return false;
+        }
     }
 }

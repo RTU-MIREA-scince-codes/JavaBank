@@ -32,18 +32,24 @@ public class ClientService {
             return null;
         }
     }
-    public void createBankAccount(String clientNumber) {
-        Client client = clientRepository.findByClientNumber(clientNumber);
-        BankAccount bankAccount = new BankAccount();
-        bankAccount.setClient(client);
-        bankAccount.setAccountNumber("B_" + client.getClientNumber() + "_" + (client.getBankAccounts().size() + 1));
-        bankAccount.setBalance(0);
-        bankAccount.setActive(true);
-        client.getBankAccounts().add(bankAccount);
+    public boolean createBankAccount(String clientNumber) {
+        try {
+            Client client = clientRepository.findByClientNumber(clientNumber);
+            BankAccount bankAccount = new BankAccount();
+            bankAccount.setClient(client);
+            bankAccount.setAccountNumber("B_" + client.getClientNumber() + "_" + (client.getBankAccounts().size() + 1));
+            bankAccount.setBalance(0);
+            bankAccount.setActive(true);
+            client.getBankAccounts().add(bankAccount);
 
-        clientRepository.save(client);
-        bankAccountRepository.save(bankAccount);
-        log.info("Bank account created by client: " + clientNumber);
+            clientRepository.save(client);
+            bankAccountRepository.save(bankAccount);
+            log.info("Bank account created by client: " + clientNumber);
+            return true;
+        } catch (Exception e) {
+            log.error("Error in ClientService.createBankAccount: " + e.getMessage());
+            return false;
+        }
     }
 
     public void transactionToBankAccount(Long bankAccountNumber, Long bankAccountNumberTo, double amount) {
