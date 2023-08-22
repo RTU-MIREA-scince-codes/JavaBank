@@ -4,11 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.rtu_mirea.javabank.dto.ClientDTO;
 import ru.rtu_mirea.javabank.dto.UserDTO;
-import ru.rtu_mirea.javabank.entity.bankEntity.BankAccount;
-import ru.rtu_mirea.javabank.entity.bankEntity.Client;
-import ru.rtu_mirea.javabank.entity.bankEntity.DebitCard;
-import ru.rtu_mirea.javabank.entity.bankEntity.Transaction;
+import ru.rtu_mirea.javabank.entity.bankEntity.*;
 import ru.rtu_mirea.javabank.entity.systemEntities.Group;
 import ru.rtu_mirea.javabank.entity.systemEntities.User;
 import ru.rtu_mirea.javabank.repository.*;
@@ -27,6 +25,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final DebitCardRepository debitCardRepository;
     private final GroupRepository groupRepository;
+    private final ManagerRepository managerRepository;
 
     public boolean createUser(UserDTO userDTO) {
         try {
@@ -49,12 +48,32 @@ public class AdminService {
         }
     }
 
+    public boolean createClient(ClientDTO clientDTO) {
+        try {
+            User userToClient = userRepository.findByEmail(clientDTO.getEmail());
+            Client client = new Client();
+            client.setUser(userToClient);
+            client.setPassportNumber(client.getPassportNumber());
+            client.setClientNumber("C" + userRepository.count() + 1);
+            clientRepository.save(client);
+            log.info("Client created: " + clientDTO.getEmail());
+            return true;
+        } catch (Exception e) {
+            log.error("Error in AdminService.createClient: " + e.getMessage());
+            return false;
+        }
+    }
+
     public boolean createManager(String email) {
         try {
             User clientToManager = userRepository.findByEmail(email);
             Set<Group> clientGroups = clientToManager.getUserGroups();
             clientGroups.add(groupRepository.findByCode("manager"));
             clientToManager.setUserGroups(clientGroups);
+            Manager manager = new Manager();
+            manager.setUser(clientToManager);
+            manager.setManagerNumber("M" + userRepository.count() + 1);
+            managerRepository.save(manager);
             userRepository.save(clientToManager);
             log.info("Client " + clientToManager.getEmail() + " is a manager");
             return true;

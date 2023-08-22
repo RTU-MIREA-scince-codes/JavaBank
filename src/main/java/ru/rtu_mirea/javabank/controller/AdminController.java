@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.rtu_mirea.javabank.dto.ClientDTO;
 import ru.rtu_mirea.javabank.dto.UserDTO;
 import ru.rtu_mirea.javabank.service.AdminService;
 
@@ -17,9 +18,22 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/create/user")
-    public ResponseEntity<?> createClient(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
         try {
             if (adminService.createUser(userDTO)) {
+                return ResponseEntity.ok("User created successfully");
+            } else {
+                return ResponseEntity.badRequest().body("User creation failed");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/create/user")
+    public ResponseEntity<?> createClient(@RequestBody ClientDTO clientDTO) {
+        try {
+            if (adminService.createClient(clientDTO)) {
                 return ResponseEntity.ok("Client created successfully");
             } else {
                 return ResponseEntity.badRequest().body("Client creation failed");
