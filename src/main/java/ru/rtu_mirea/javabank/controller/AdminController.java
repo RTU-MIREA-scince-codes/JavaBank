@@ -30,7 +30,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/create/user")
+    @PostMapping("/create/client")
     public ResponseEntity<?> createClient(@RequestBody ClientDTO clientDTO) {
         try {
             if (adminService.createClient(clientDTO)) {
