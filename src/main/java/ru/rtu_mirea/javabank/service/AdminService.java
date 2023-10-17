@@ -55,6 +55,7 @@ public class AdminService {
             client.setUser(userToClient);
             client.setPassportNumber(client.getPassportNumber());
             client.setClientNumber("C" + userRepository.count() + 1);
+            client.setManager(managerRepository.findByManagerNumber(clientDTO.getManagerNumber()));
             clientRepository.save(client);
             log.info("Client created: " + clientDTO.getEmail());
             return true;
