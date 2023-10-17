@@ -51,7 +51,7 @@ public class ManagerController {
         }
     }
 
-    @PostMapping("/create/bankAccount/{clientNumber}")
+    @GetMapping("/create/bankAccount/{clientNumber}")
     public ResponseEntity<?> createClientBankAccount(@PathVariable String clientNumber) {
         try {
             if (managerService.createBankAccount(clientNumber)) {
